@@ -1,10 +1,11 @@
 from web3 import Web3
-import time
-import json
 import hidden_details
+import json
 import contracts.doe_token_abi as doe_token_abi
 import contracts.eth_usdc_abi as eth_usdc_abi
 import contracts.eth_usdc as eth_usdc
+from threading import Thread
+import time
 
 address = eth_usdc.address
 token0 = eth_usdc.token0
@@ -40,8 +41,11 @@ def log_loop(event_filter, poll_interval):
 def main():
     w3_eth = Web3(Web3.HTTPProvider(hidden_details.eth_mainnet))
     contract = w3_eth.eth.contract(address=address, abi=eth_usdc_abi.get_abi())
-    events_filter = contract.events.Swap.createFilter(fromBlock='latest')
-    log_loop(events_filter, 2)
+    event_filter = contract.events.Swap.createFilter(fromBlock='latest')
+
+    worker = Thread(target=log_loop, args=(event_filter, 2), daemon=True)
+    worker.start()
+    time.sleep(100)
 
 if __name__ == '__main__':
     main()
