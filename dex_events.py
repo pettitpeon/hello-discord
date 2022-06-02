@@ -3,13 +3,13 @@ import asyncio
 import hidden_details
 import json
 import contracts.doe_token_abi as doe_token_abi
-import contracts.eth_usdc_abi as eth_usdc_abi
-import contracts.eth_usdc as eth_usdc
+import contracts.usdc_eth_abi as usdc_eth_abi
+import contracts.usdc_eth as usdc_eth
 import time
 
-address = eth_usdc.address
-token0 = eth_usdc.token0
-token1 = eth_usdc.token1
+address = usdc_eth.address
+token0 = usdc_eth.token0
+token1 = usdc_eth.token1
 
 def to_string(amount, token):
     value = Web3.fromWei(amount, token['unit'])
@@ -40,7 +40,7 @@ async def log_loop(event_filter, poll_interval):
 
 def main():
     w3_eth = Web3(Web3.HTTPProvider(hidden_details.eth_mainnet))
-    contract = w3_eth.eth.contract(address=address, abi=eth_usdc_abi.get_abi())
+    contract = w3_eth.eth.contract(address=address, abi=usdc_eth_abi.get_abi())
     event_filter = contract.events.Swap.createFilter(fromBlock='latest')
 
     asyncio.run(log_loop(event_filter, 2))
