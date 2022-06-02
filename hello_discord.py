@@ -28,7 +28,8 @@ swap[1]['tokens'] = [eth_usdt.token0, eth_usdt.token1]
 swap[1]['buyT'] = 1
 
 channel = None
-channel_name = "test-bot"
+channel_name = "test-bot" # 978368981951987797
+channel_id = 978368981951987797
 
 def get_channel(channels, name):
     for c in channels:
@@ -49,17 +50,22 @@ async def on_ready():
     global channel
     print(f'We have logged in as {client.user}')
     channel = get_channel(client.get_all_channels(), channel_name)
+    print(channel)
+    channel = client.get_channel(channel_id)
+    print(channel)
     asyncio.create_task(log_loop(get_swap_filters(), 2))
     print(f'Swap event loop started')
 
 @client.event
 async def on_message(message):
+    print("got msg")
     if message.author == client.user:
         return
 
-    if message.content.startswith('$hello'):
+    if message.content.startswith('hello'):
         msg = await message.channel.send('Hello!')
-        await msg.delete()
+        print(msg)
+        # await msg.delete()
 
 def to_string(amount, token):
     value = Web3.fromWei(amount, token['unit'])
@@ -85,9 +91,11 @@ async def handle_event(event, swap):
     message = message + f'In:  {to_string(amnt_in, swap["tokens"][tok_in])}\n'
     message = message + f'Out: {to_string(amnt_out, swap["tokens"][swap["buyT"]])}\n'
     print(message)
-    # embed = discord.Embed()
-    # embed.description = message
-    # msg = await channel.send(embed=embed, delete_after=1)
+    embed = discord.Embed()
+    embed.description = message
+    msg = await channel.send(embed=embed)
+    time.sleep(1)
+    await msg.delete()
 
 async def log_loop(swap_filter, poll_interval):
     while True:

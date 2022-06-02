@@ -19,7 +19,7 @@ import contracts.eth_usdt_abi as eth_usdt_abi
 import hidden_details
 discord_token = hidden_details.TOKEN
 eth_node_url = hidden_details.eth_mainnet # eg: https://mainnet.infura.io/v3/{infura_key}
-discord_channel_name = "test-bot"
+discord_channel_id = 978368981951987797
 ######## Details required from the user
 
 swap = [{}, {}]
@@ -37,12 +37,6 @@ channel = None
 intents = discord.Intents.default()
 client = discord.Client()
 
-def get_channel(channels, name):
-    for c in channels:
-        if c.name == name:
-            return c
-    return None
-
 def get_swap_filters():
     w3_eth = Web3(Web3.HTTPProvider(eth_node_url))
     print(f'W3 connected: {w3_eth.isConnected()}')
@@ -56,7 +50,8 @@ def get_swap_filters():
 async def on_ready():
     global channel
     print(f'We have logged in as {client.user}')
-    channel = get_channel(client.get_all_channels(), discord_channel_name)
+    channel = client.get_channel(discord_channel_id)
+    print(f'Channel: {channel}')
     asyncio.create_task(event_loop(get_swap_filters(), 2))
     print(f'Swap event loop started')
 
