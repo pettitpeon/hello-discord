@@ -19,7 +19,7 @@ import contracts.eth_usdt_abi as eth_usdt_abi
 import hidden_details
 discord_token = hidden_details.TOKEN
 eth_node_url = hidden_details.eth_mainnet # eg: https://mainnet.infura.io/v3/{infura_key}
-discord_channel_id = 978368981951987797
+discord_channel_id = hidden_details.channel_id
 ######## Details required from the user
 
 swap = [{}, {}]
