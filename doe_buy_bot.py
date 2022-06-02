@@ -8,6 +8,8 @@ import contracts.usdc_doe_abi as usdc_doe_abi
 import contracts.eth_doe as eth_doe
 import contracts.eth_doe_abi as eth_doe_abi
 
+# For testing with other contracts
+# Change the swap[] list with these
 import contracts.usdc_eth as usdc_eth
 import contracts.usdc_eth_abi as usdc_eth_abi
 import contracts.eth_usdt as eth_usdt
@@ -85,7 +87,7 @@ async def handle_event(event, swap):
 
     embed = discord.Embed()
     embed.description = message
-    await channel.send(embed=embed, delete_after=1)
+    await channel.send(embed=embed)
 
 async def event_loop(swap_filter, poll_interval):
     while True:
@@ -93,6 +95,5 @@ async def event_loop(swap_filter, poll_interval):
             for event in swap_filter[i].get_new_entries():
                 await handle_event(event, swap[i])
         time.sleep(poll_interval)
-
 
 client.run(discord_token)
