@@ -26,7 +26,7 @@ swap = [{}, {}]
 swap[0]['abi'] = usdc_doe_abi.get_abi()
 swap[0]['addr'] = usdc_doe.address
 swap[0]['tokens'] = [usdc_doe.token0, usdc_doe.token1]
-swap[0]['buyT'] = 0
+swap[0]['buyT'] = 1
 
 swap[1]['abi'] = eth_doe_abi.get_abi()
 swap[1]['addr'] = eth_doe.address
